@@ -74,8 +74,11 @@ fn openInventory() void {
 		list.add(grid);
 	}
 	const verticalThing = VerticalList.init(.{0, 0}, 300, padding);
-	toolButton = Button.initText(.{8, 0}, 116, toolTypes.items[currentToolType].id(), .{.callback = &toggleTool});
-	verticalThing.add(toolButton);
+	const toolButtonHolder = HorizontalList.init();
+	toolButton = Button.initText(.{8, 16}, 132, toolTypes.items[currentToolType].id(), .{.callback = &toggleTool});
+	toolButtonHolder.add(toolButton);
+	toolButtonHolder.finish(.{padding + 8, padding + 8}, .center);
+	verticalThing.add(toolButtonHolder);
 	const buttonHeight = verticalThing.size[1];
 	const craftingResultList = HorizontalList.init();
 	craftingResultList.add(Icon.init(.{0, 0}, .{32, 32}, inventory_crafting.arrowTexture, false));
@@ -114,9 +117,9 @@ pub fn render() void {
 	const offsetY = 4*ItemSlot.sizeWithBorder;
 	const fontSize = 16;
 
-	main.graphics.draw.print("{s}{} durability", .{if(currentResult.tool.maxDurability != 0) "#ffffff" else "#ff0000", @as(usize, @intFromFloat(currentResult.tool.maxDurability))}, offsetX, offsetY, fontSize, .left);
-	main.graphics.draw.print("#ffffff{d:.1} swings/s", .{currentResult.tool.swingSpeed}, offsetX, offsetY + fontSize, fontSize, .left);
-	main.graphics.draw.print("#ffffff{d:.1} damage", .{currentResult.tool.damage}, offsetX, offsetY + 2*fontSize, fontSize, .left);
+	main.graphics.draw.print("#ffffffSwing Speed: {d:.1}/s", .{currentResult.tool.swingSpeed}, offsetX, offsetY, fontSize, .left);
+	main.graphics.draw.print("#ffffffDamage: {d:.1}", .{currentResult.tool.damage}, offsetX, offsetY + fontSize, fontSize, .left);
+	main.graphics.draw.print("{s}Durability: {}", .{if(currentResult.tool.maxDurability != 0) "#ffffff" else "#ff0000", @as(usize, @intFromFloat(currentResult.tool.maxDurability))}, offsetX, offsetY + 2 * fontSize, fontSize, .left);
 }
 
 pub fn onOpen() void {

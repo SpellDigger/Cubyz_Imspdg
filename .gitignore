@@ -8,6 +8,14 @@ gamecontrollerdb.txt
 gamecontrollerdb.stamp
 launchConfig.zon
 
+Cubyz.dll
+CubyzFork
+CubyzFork.pub
+CubyzForkSSH
+CubyzForkSSH.pub
+id_rsa
+id_rsa.pub
+
 test.png
 
 /mods/*

@@ -551,7 +551,7 @@ pub const GLFWCallbacks = struct { // MARK: GLFWCallbacks
 		_ = xOffset;
 		scrollOffset += @floatCast(yOffset);
 	}
-	fn glDebugOutput(source: c_uint, typ: c_uint, _: c_uint, severity: c_uint, length: c_int, message: [*c]const u8, _: ?*const anyopaque) callconv(.c) void {
+	fn glDebugOutput(source: c_uint, typ: c_uint, id: c_uint, severity: c_uint, _: c_int, message: [*c]const u8, _: ?*const anyopaque) callconv(.c) void {
 		const sourceString: []const u8 = switch(source) {
 			c.GL_DEBUG_SOURCE_API => "API",
 			c.GL_DEBUG_SOURCE_APPLICATION => "Application",
@@ -575,10 +575,10 @@ pub const GLFWCallbacks = struct { // MARK: GLFWCallbacks
 		};
 		switch(severity) {
 			c.GL_DEBUG_SEVERITY_HIGH => {
-				std.log.err("OpenGL {s} {s}: {s}", .{sourceString, typeString, message[0..@intCast(length)]});
+				std.log.warn("! [{}, {}] OpenGL {s} {s}: {s}", .{source, id, sourceString, typeString, message});
 			},
 			else => {
-				std.log.warn("OpenGL {s} {s}: {s}", .{sourceString, typeString, message[0..@intCast(length)]});
+				std.log.warn("OpenGL {s} {s}: {s}", .{sourceString, typeString, message});
 			},
 		}
 	}
@@ -706,6 +706,11 @@ pub fn init() void { // MARK: init()
 	if(c.gladLoadGL(c.glfwGetProcAddress) == 0) {
 		@panic("Failed to load OpenGL functions from GLAD");
 	}
+
+	var throwvbo: c_uint = 0;
+	c.glGenBuffers(1, &throwvbo);
+	c.glBindBuffer(c.GL_ARRAY_BUFFER, throwvbo);
+
 	reloadSettings();
 
 	c.glEnable(c.GL_DEBUG_OUTPUT);
