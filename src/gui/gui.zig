@@ -184,7 +184,7 @@ pub fn deinit() void {
 
 pub fn save() void { // MARK: save()
 	var guiZon = ZonElement.initObject(main.stackAllocator);
-	defer guiZon.deinit(main.stackAllocator);
+	//defer guiZon.deinit(main.stackAllocator);
 	for(windowList.items) |window| {
 		const windowZon = ZonElement.initObject(main.stackAllocator);
 		for(window.relativePosition, 0..) |relPos, i| {
@@ -227,7 +227,9 @@ pub fn save() void { // MARK: save()
 	defer oldZon.deinit(main.stackAllocator);
 
 	if(oldZon == .object) {
-		oldZon.join(guiZon);
+		guiZon.join(oldZon);
+		oldZon.deinit(main.stackAllocator);
+		oldZon = guiZon;
 	} else {
 		oldZon.deinit(main.stackAllocator);
 		oldZon = guiZon;

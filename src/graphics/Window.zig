@@ -575,7 +575,7 @@ pub const GLFWCallbacks = struct { // MARK: GLFWCallbacks
 		};
 		switch(severity) {
 			c.GL_DEBUG_SEVERITY_HIGH => {
-				std.log.warn("! [{}, {}] OpenGL {s} {s}: {s}", .{source, id, sourceString, typeString, message});
+				std.log.debug("! [{}, {}] OpenGL {s} {s}: {s}", .{source, id, sourceString, typeString, message});
 			},
 			else => {
 				std.log.warn("OpenGL {s} {s}: {s}", .{sourceString, typeString, message});

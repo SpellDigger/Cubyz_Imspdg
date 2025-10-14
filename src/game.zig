@@ -415,7 +415,7 @@ pub const Player = struct { // MARK: Player
 	pub var isGhost: Atomic(bool) = .init(false);
 	pub var hyperSpeed: Atomic(bool) = .init(false);
 	pub var mutex: std.Thread.Mutex = .{};
-	pub const inventorySize = 32;
+	pub const inventorySize = 52;
 	pub var inventory: Inventory = undefined;
 	pub var selectedSlot: u32 = 0;
 

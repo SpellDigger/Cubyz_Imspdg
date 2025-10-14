@@ -37,7 +37,7 @@ pub fn deinit() void {
 	craftingIcon.deinit();
 }
 
-var itemSlots: [20]*ItemSlot = undefined;
+var itemSlots: [main.game.Player.inventorySize - 12]*ItemSlot = undefined;
 
 pub fn onOpen() void {
 	const list = VerticalList.init(.{padding, padding + 16}, 300, 0);
@@ -48,7 +48,7 @@ pub fn onOpen() void {
 		row.add(Button.initIcon(.{0, 0}, .{32, 32}, craftingIcon, true, gui.openWindowCallback("inventory_crafting")));
 		list.add(row);
 	}
-	for(0..2) |y| {
+	for(0..((main.game.Player.inventorySize - 12) / 10)) |y| {
 		const row = HorizontalList.init();
 		for(0..10) |x| {
 			const index: usize = 12 + y*10 + x;
