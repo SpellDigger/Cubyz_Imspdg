@@ -876,7 +876,7 @@ pub const Tool = struct { // MARK: Tool
 		if (self.isEffectiveOn(block)) {
 			return damage;
 		}
-		return 0;
+		return main.game.Player.defaultBlockDamage;
 	}
 
 	pub fn onUseReturnBroken(self: *Tool) bool {
