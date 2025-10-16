@@ -237,7 +237,7 @@ pub const User = struct { // MARK: User
 
 	fn loadUnloadChunks(self: *User) void {
 		const newPos: Vec3i = @as(Vec3i, @intFromFloat(self.player.pos)) +% @as(Vec3i, @splat(chunk.chunkSize/2)) & ~@as(Vec3i, @splat(chunk.chunkMask));
-		const newRenderDistance = main.settings.simulationDistance;
+		const newRenderDistance : u16 = main.settings.simulationDistance;
 		if(@reduce(.Or, newPos != self.lastPos) or newRenderDistance != self.lastRenderDistance) {
 			self.unloadOldChunk(newPos, newRenderDistance);
 			self.loadNewChunk(newPos, newRenderDistance);
