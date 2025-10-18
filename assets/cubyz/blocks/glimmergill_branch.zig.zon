@@ -30,10 +30,6 @@
 					.id = "durable",
 					.strength = 0.45,
 				},
-				.{
-					.id = "light",
-					.strength = 10000,
-				},
 			},
 		},
 		.texture = "branch/glimmergill.png",
