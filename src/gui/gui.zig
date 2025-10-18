@@ -18,6 +18,7 @@ const ScrollBar = @import("components/ScrollBar.zig");
 const ContinuousSlider = @import("components/ContinuousSlider.zig");
 const DiscreteSlider = @import("components/DiscreteSlider.zig");
 const TextInput = @import("components/TextInput.zig");
+const Label = @import("components/Label.zig");
 pub const GuiComponent = @import("gui_component.zig").GuiComponent;
 pub const GuiWindow = @import("GuiWindow.zig");
 
@@ -155,6 +156,7 @@ pub fn init() void { // MARK: init()
 	ContinuousSlider.__init();
 	DiscreteSlider.__init();
 	TextInput.__init();
+	GuiComponent.Tooltip.__init();
 	load();
 	GamepadCursor.init();
 }
@@ -767,28 +769,20 @@ pub const inventory = struct { // MARK: inventory
 		if(carried.getAmount(0) == 0) if(hoveredItemSlot) |hovered| {
 			if(hovered.inventory.getItem(hovered.itemSlot)) |item| {
 				const tooltip = item.getTooltip();
-				var textBuffer = graphics.TextBuffer.init(main.stackAllocator, tooltip, .{}, false, .left);
-				defer textBuffer.deinit();
-				var size = textBuffer.calculateLineBreaks(16, 300);
+				var label = GuiComponent.Label.init(Vec2f{0, 0}, 300, tooltip, .left);
+				var size = label.text.calculateLineBreaks(Label.fontSize, 300);
 				size[0] = 0;
-				for(textBuffer.lineBreaks.items) |lineBreak| {
+				for(label.text.lineBreaks.items) |lineBreak| {
 					size[0] = @max(size[0], lineBreak.width);
 				}
-				var pos = mousePos;
-				if(pos[0] + size[0] >= main.Window.getWindowSize()[0]/scale) {
-					pos[0] -= size[0];
-				}
-				if(pos[1] + size[1] >= main.Window.getWindowSize()[1]/scale) {
-					pos[1] -= size[1];
-				}
-				pos = @max(pos, Vec2f{0, 0});
-				const border1: f32 = 2;
-				const border2: f32 = 1;
-				draw.setColor(0xffffff00);
-				draw.rect(pos - @as(Vec2f, @splat(border1)), size + @as(Vec2f, @splat(2*border1)));
-				draw.setColor(0xff000000);
-				draw.rect(pos - @as(Vec2f, @splat(border2)), size + @as(Vec2f, @splat(2*border2)));
-				textBuffer.render(pos[0], pos[1], 16);
+				label.size = size;
+
+				var tooltipElement = GuiComponent.Tooltip.init();
+				defer tooltipElement.deinit();
+				tooltipElement.components.add(label);
+				tooltipElement.components.finish(.left);
+				tooltipElement.pos = mousePos;
+				tooltipElement.render();
 			}
 		};
 	}
